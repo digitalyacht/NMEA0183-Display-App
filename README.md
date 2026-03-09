@@ -1,6 +1,6 @@
 # NMEA0183 Display App
 
-![Screen Shot with iKreate USB Interface.](https://github.com/digitalyacht/NMEA2000-Display-App/blob/main/Screen%20Shots/USB-C+Display%20App.jpg?raw=true)
+![Screen Shot with iKreate USB Interface.](https://github.com/digitalyacht/NMEA0183-Display-App/blob/main/Screen%20Shots/USB-C+Display%20App.jpg?raw=true)
 
 Welcome to our NMEA083 Display App repository. This simple but powerful web app, in conjunction with our USB to NMEA Adaptor cables, can display all received Sentences from your NMEA0183 equipment, send serial commands and store the received data to a log file. 
 
