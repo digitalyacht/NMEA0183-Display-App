@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NMEA 0183 Display Program</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgdmVyc2lvbj0iMS4xIgogICB2aWV3Qm94PSIwIDAgMjU2IDI1NiIKICAgaWQ9InN2ZzgiCiAgIHNvZGlwb2RpOmRvY25hbWU9ImZhdmljb24wMTgzLnN2ZyIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMS40LjMgKDBkMTVmNzUsIDIwMjUtMTItMjUpIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM4IiAvPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0ibmFtZWR2aWV3OCIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiMwMDAwMDAiCiAgICAgYm9yZGVyb3BhY2l0eT0iMC4yNSIKICAgICBpbmtzY2FwZTpzaG93cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIgogICAgIGlua3NjYXBlOnBhZ2VjaGVja2VyYm9hcmQ9IjAiCiAgICAgaW5rc2NhcGU6ZGVza2NvbG9yPSIjZDFkMWQxIgogICAgIGlua3NjYXBlOnpvb209IjIuMzAwODU5MiIKICAgICBpbmtzY2FwZTpjeD0iOTQuMzEyNTk0IgogICAgIGlua3NjYXBlOmN5PSIxMTUuODI2MyIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTA1MSIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iLTkiCiAgICAgaW5rc2NhcGU6d2luZG93LXk9Ii05IgogICAgIGlua3NjYXBlOndpbmRvdy1tYXhpbWl6ZWQ9IjEiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ic3ZnOCIgLz4KICA8cGF0aAogICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1MS41NiAzLjA0NTcpIgogICAgIGQ9Im0wIDBjMS44NTk1LTAuMDcxNDcxIDMuNzE4Mi0wLjE3MzQ5IDUuNTc0Mi0wLjMwNzYyIDE1LjA0My0xLjA2NDkgMTUuMDQzLTEuMDY0OSAxOS44MzYgMi44ODczIDMuODI1NCA0LjM0MzcgNi41MTA4IDkuMTg4NiA5LjAyODcgMTQuMzc1IDMuOTE5MS0xLjgwMzUgNi41NDc3LTQuMzUyNCA5LjUtNy40Mzc1IDEuODEyMy0xLjg3OSAzLjY0MzgtMy43MjU0IDUuNS01LjU2MjUgMC41MjYyNi0wLjU0MzE4IDEuMDUyNS0xLjA4NjQgMS41OTQ3LTEuNjQ2IDMuNzMzNS0yLjEwMTcgNy4zMzYyLTEuNzIzMyAxMS41NDYtMS42NDcgMC44ODIxOCAwLjAwNDI0NDggMS43NjQ0IDAuMDA4NDg5NyAyLjY3MzMgMC4wMTI4NjMgMi44MTIzIDAuMDE2NzY3IDUuNjI0IDAuMDU0NDE2IDguNDM2MSAwLjA5MjYwNiAxLjkwODggMC4wMTUwNDkgMy44MTc3IDAuMDI4NzM3IDUuNzI2NiAwLjA0MTAxNiA0LjY3NDggMC4wMzMwNDMgOS4zNDkgMC4wODQ4MTIgMTQuMDIzIDAuMTQ2NDgtMS40NjQ4IDEwLjI5MS0zLjM5ODggMjAuNDUyLTUuNDQxNCAzMC42NDEtMC4zMzExOSAxLjY2MDUtMC42NjIyNCAzLjMyMTEtMC45OTMxNSA0Ljk4MTYtMC42ODgxIDMuNDQ5NC0xLjM3ODMgNi44OTgzLTIuMDcwMSAxMC4zNDctMC44ODc4NiA0LjQyNzctMS43Njk1IDguODU2Ni0yLjY0OTYgMTMuMjg2LTAuNjc5MjkgMy40MTQ3LTEuMzYyMSA2LjgyODgtMi4wNDYgMTAuMjQzLTAuMzI2OTMgMS42MzQ1LTAuNjUyNjcgMy4yNjkzLTAuOTc3MTkgNC45MDQzLTAuNDUwOTMgMi4yNjk0LTAuOTA2NzEgNC41Mzc5LTEuMzYzOCA2LjgwNjEtMC4yNTgyMiAxLjI5MDktMC41MTY0NCAyLjU4MTktMC43ODI0OSAzLjkxMTktMC42NzYyNSAyLjg4MDEtMC42NzYyNSAyLjg4MDEtMS42NzYzIDMuODgwMS0yLjk1NzEgMC4wODg2ODMtNS44OTA3IDAuMTE1Mi04Ljg0NzcgMC4wOTc2NTYtMS4zMjk2LTAuMDAyMTIyNC0xLjMyOTYtMC4wMDIxMjI0LTIuNjg2MS0wLjAwNDI4NzctMi44NDI5LTAuMDA1NjE2NC01LjY4NTgtMC4wMTgxNzItOC41Mjg3LTAuMDMwODY5LTEuOTIyNS0wLjAwNTAxMjktMy44NDUxLTAuMDA5NTc2Mi01Ljc2NzYtMC4wMTM2NzItNC43MjMzLTAuMDExMDUxLTkuNDQ2Ni0wLjAyODMyNi0xNC4xNy0wLjA0ODgyOCAwLjY2NDczLTguODQ2IDIuMzMyMy0xNy40NDEgNC4wNjI1LTI2LjEyNSAwLjI4NDkzLTEuNDQ3OCAwLjU2OTQ0LTIuODk1NyAwLjg1MzUyLTQuMzQzOCAwLjY4OTgyLTMuNTExNCAxLjM4NTMtNy4wMjE2IDIuMDg0LTEwLjUzMS0xLjYwMjMgMS40MzUzLTMuMjAzNyAyLjg3MTctNC44MDQ3IDQuMzA4Ni0wLjg5MTg3IDAuNzk5NzgtMS43ODM3IDEuNTk5Ni0yLjcwMjYgMi40MjM2LTIuNTg0NiAyLjM1MTQtNS4wNjM3IDQuNzU3OC03LjQ5MjcgNy4yNjc4LTQuMjg0MS0xLjUyNDUtNS44NjQ3LTQuMzg4LTguMjUtOC4xMjUtMC43MDY0MS0xLjA5NTctMS40MTI4LTIuMTkxNC0yLjE0MDYtMy4zMjAzLTAuNTMxMDktMC44NDMwNS0xLjA2MjItMS42ODYxLTEuNjA5NC0yLjU1NDctMi4zNTIgOS4wMjgzLTQuMzI2OSAxOC4xMDktNi4xODc1IDI3LjI1bC0yLjgxMjUgMTMuNzVoLTQxYzIuMjk4OC0xNC45NDIgMi4yOTg4LTE0Ljk0MiAzLjU4ODEtMjEuMzQ1IDAuMTQ0OTktMC43MzE4MSAwLjI4OTk4LTEuNDYzNiAwLjQzOTM2LTIuMjE3NiAwLjQ2ODQxLTIuMzYgMC45NDA5NC00LjcxOTIgMS40MTM5LTcuMDc4MyAwLjMzMTE5LTEuNjYwNSAwLjY2MjI0LTMuMzIxMSAwLjk5MzE1LTQuOTgxNiAwLjY4ODEtMy40NDk0IDEuMzc4My02Ljg5ODMgMi4wNzAxLTEwLjM0NyAwLjg4Nzg2LTQuNDI3NyAxLjc2OTUtOC44NTY2IDIuNjQ5Ni0xMy4yODYgMC42NzkyOS0zLjQxNDcgMS4zNjIxLTYuODI4OCAyLjA0Ni0xMC4yNDMgMC4zMjY5My0xLjYzNDUgMC42NTI2Ny0zLjI2OTMgMC45NzcxOS00LjkwNDMgMC40NTA5My0yLjI2OTQgMC45MDY3MS00LjUzNzkgMS4zNjM4LTYuODA2MSAwLjI1ODIyLTEuMjkwOSAwLjUxNjQ0LTIuNTgxOSAwLjc4MjQ5LTMuOTExOSAxLjU3MDMtNi42ODc2IDEyLjM4NS00LjY1NTggMTguMjM3LTQuODM0NHoiCiAgICAgaWQ9InBhdGgxIiAvPgogIDxwYXRoCiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjksNCkiCiAgICAgZD0ibTAgMGgzMGwxMyAyNmMxLjk4LTguNTggMy45Ni0xNy4xNiA2LTI2aDQxYy0zLjMyOTYgMTguMjAyLTYuODA4MiAzNi4zNjUtMTAuNDQ5IDU0LjUwNy0wLjY4MDY3IDMuMzkxNy0xLjM1NzcgNi43ODQtMi4wMzM5IDEwLjE3Ny0wLjY1NDgxIDMuMjgzLTEuMzEyNSA2LjU2NTQtMS45NyA5Ljg0NzgtMC4yNDE2NCAxLjIxMjItMC40ODMyOCAyLjQyNDUtMC43MzIyNCAzLjY3MzUtMC4yMjQwNCAxLjExMzktMC40NDgwNyAyLjIyNzctMC42Nzg4OSAzLjM3NTQtMC4xOTU4OCAwLjk3Nzc5LTAuMzkxNzUgMS45NTU2LTAuNTkzNTcgMi45NjMtMC41NDIxOCAyLjQ1NjktMC41NDIxOCAyLjQ1NjktMS41NDIyIDUuNDU2OWgtMzFjLTEuNjA4OC0zLjAzMTktMy4yMTc1LTYuMDYzOC00Ljg3NS05LjE4NzUtMC41MDM4Ni0wLjk0NjQxLTEuMDA3Ny0xLjg5MjgtMS41MjY5LTIuODY3OS0wLjQwMTA2LTAuNzU5MDItMC44MDIxMi0xLjUxOC0xLjIxNTMtMi4zLTAuNDA4NDctMC43Njk4MS0wLjgxNjk0LTEuNTM5Ni0xLjIzNzgtMi4zMzI4LTEuMTg1OC0yLjM5NDEtMi4xODUxLTQuODE5NS0zLjE0NS03LjMxMThoLTFsLTUgMjNoLTQxYzQuMjAyNS0yMS4zNDIgNC4yMDI1LTIxLjM0MiA1Ljk5NDEtMzAuNDI0IDEuMjIzNS02LjIwMiAyLjQ0NjctMTIuNDA0IDMuNjY3Mi0xOC42MDcgMC45ODM4NC00Ljk5OTQgMS45Njk2LTkuOTk4NCAyLjk1NjctMTQuOTk3IDAuMzc2NjYtMS45MDkzIDAuNzUyNjMtMy44MTg3IDEuMTI3OS01LjcyODIgMC41MjQ4NS0yLjY3IDEuMDUyMS01LjMzOTUgMS41OC04LjAwODkgMC4yMzMwNS0xLjE5MDEgMC4yMzMwNS0xLjE5MDEgMC40NzA4MS0yLjQwNDIgMC41OTg1My0zLjAxNjEgMS4yMjk3LTUuOTEwMiAyLjIwMzMtOC44MzA5eiIKICAgICBpZD0icGF0aDIiIC8+CiAgPHBhdGgKICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNDYsOTgpIgogICAgIGQ9Im0wIDBoNThjMy4wMzM4IDE4LjQ4NyA1Ljk0ODQgMzYuOTkgOC43NjI5IDU1LjUxMiAwLjM2NjI0IDIuNDA4MSAwLjczMzc1IDQuODE1OSAxLjEwMjUgNy4yMjM2IDAuNTIzODggMy40MjM2IDEuMDQyOCA2Ljg0OCAxLjU2MDMgMTAuMjczIDAuMTU5MTQgMS4wMzUzIDAuMzE4MjkgMi4wNzA1IDAuNDgyMjUgMy4xMzcyIDAuMjE2MjggMS40NDI1IDAuMjE2MjggMS40NDI1IDAuNDM2OTQgMi45MTQxIDAuMTI3MDQgMC44MzY5MyAwLjI1NDA4IDEuNjczOSAwLjM4NDk2IDIuNTM2MiAwLjI3MDA3IDIuNDA0OCAwLjI3MDA3IDIuNDA0OCAwLjI3MDA3IDcuNDA0OGgtNDFsLTItMTRoLTI4bC0yIDUtNSA5aC00MWMxLjM4MDQtNC4xNDEyIDIuNDA3MS03LjAxNTcgNC41MTE3LTEwLjYzMyAwLjUwMjczLTAuODczOTggMS4wMDU1LTEuNzQ4IDEuNTIzNC0yLjY0ODQgMC41NDUyNy0wLjkzODQ0IDEuMDkwNS0xLjg3NjkgMS42NTIzLTIuODQzOCA1LjA5MzMtOC44Nzg4IDEwLjAxMS0xNy44MzUgMTQuODEyLTI2Ljg3NSA2LjEzODctMTEuNTQ1IDEyLjQ3Ny0yMi45NjYgMTguOTc3LTM0LjMxMSAyLjE5OS0zLjg4MjMgNC4zNTYxLTcuNzg4MyA2LjUyMjktMTEuNjg5em0yMiAzM2MtMS42NyAzLjE0NDEtMy4zMzU0IDYuMjkwNi01IDkuNDM3NS0wLjQ3Njk1IDAuODk3ODMtMC45NTM5MSAxLjc5NTctMS40NDUzIDIuNzIwNy0wLjQ1MTE3IDAuODU0LTAuOTAyMzQgMS43MDgtMS4zNjcyIDIuNTg3OS0wLjYyODQyIDEuMTg2MS0wLjYyODQyIDEuMTg2MS0xLjI2OTUgMi4zOTYyLTAuOTkxOCAxLjY2MTctMC45OTE4IDEuNjYxNy0wLjkxNzk3IDIuODU3N2gxM2MtMC4xNDE2Ni0yLjM5NjEtMC4yODgxOS00Ljc5MTgtMC40Mzc1LTcuMTg3NS0wLjAzOTMxNi0wLjY3MzU0LTAuMDc4NjMzLTEuMzQ3MS0wLjExOTE0LTIuMDQxLTAuMjMyNjQtMy42Njg1LTAuNjE1NDMtNy4xODg0LTEuNDQzNC0xMC43NzFoLTF6IgogICAgIGlkPSJwYXRoMyIgLz4KICA8cGF0aAogICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM4LDk4KSIKICAgICBkPSJtMCAwaDc1Yy0xIDktMSA5LTQgMjJoLTM1bC0xIDktMSAyaDI0Yy0wLjg1NTk3IDcuNzAzNy0yLjE4ODQgMTQuNTE3LTQgMjItNy45MiAwLjMzLTE1Ljg0IDAuNjYtMjQgMWwtMiAxMCAzNCAxLTQgMjJoLTc2YzQuMjAyNS0yMS4zNDIgNC4yMDI1LTIxLjM0MiA1Ljk5NDEtMzAuNDI0IDEuMjIzNS02LjIwMiAyLjQ0NjctMTIuNDA0IDMuNjY3Mi0xOC42MDcgMC45ODM4NC00Ljk5OTQgMS45Njk2LTkuOTk4NCAyLjk1NjctMTQuOTk3IDAuMzc2NjYtMS45MDkzIDAuNzUyNjMtMy44MTg3IDEuMTI3OS01LjcyODIgMC41MjQ4NS0yLjY3IDEuMDUyMS01LjMzOTUgMS41OC04LjAwODkgMC4yMzMwNS0xLjE5MDEgMC4yMzMwNS0xLjE5MDEgMC40NzA4MS0yLjQwNDIgMC41OTg1My0zLjAxNjEgMS4yMjk3LTUuOTEwMiAyLjIwMzMtOC44MzA5eiIKICAgICBpZD0icGF0aDQiIC8+CiAgPHBhdGgKICAgICBzdHlsZT0iZm9udC1zaXplOjgwcHg7bGluZS1oZWlnaHQ6MC42O2ZvbnQtZmFtaWx5OidIdW1uc3Q3NzcgQmxrIEJUJzstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidIdW1uc3Q3NzcgQmxrIEJUJzt0ZXh0LWFsaWduOmVuZDt0ZXh0LWFuY2hvcjplbmQ7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLWRhc2hhcnJheTpub25lIgogICAgIGQ9Im0gNTIuNjk0MjQ0LDIwMi40ODI1MyBxIC0zLjc4OTA2MiwwIC01LjU4NTkzNyw0LjY0ODQ0IC0xLjc5Njg3NSw0LjY0ODQzIC0xLjc5Njg3NSwxNC40NTMxMiAwLDkuOTIxODggMS43OTY4NzUsMTQuNTcwMzEgMS43OTY4NzUsNC42NDg0NCA1LjU4NTkzNyw0LjY0ODQ0IDMuNzEwOTM4LDAgNS40Njg3NSwtNC42NDg0NCAxLjc5Njg3NSwtNC42ODc1IDEuNzk2ODc1LC0xNC41NzAzMSAwLC05Ljg0Mzc1IC0xLjc1NzgxMiwtMTQuNDUzMTIgLTEuNzU3ODEzLC00LjY0ODQ0IC01LjUwNzgxMywtNC42NDg0NCB6IG0gMCwtOS44NDM3NSBxIDEwLjQyOTY4OCwwIDE1LjgyMDMxMyw3LjM4MjgxIDUuMzkwNjI1LDcuMzQzNzUgNS4zOTA2MjUsMjEuNzE4NzUgMCwxNC4zNzUgLTUuMzUxNTYzLDIxLjcxODc1IC01LjM1MTU2Miw3LjM0Mzc1IC0xNS44NTkzNzUsNy4zNDM3NSAtMTAuNDY4NzUsMCAtMTUuODU5Mzc1LC03LjM0Mzc1IC01LjM1MTU2MiwtNy4zNDM3NSAtNS4zNTE1NjIsLTIxLjcxODc1IDAsLTE0LjMzNTk0IDUuMzkwNjI1LC0yMS43MTg3NSA1LjM5MDYyNSwtNy4zODI4MSAxNS44MjAzMTIsLTcuMzgyODEgeiBtIDQ4LjQ3NjU2NiwxLjM2NzE5IGggMTEuNTIzNDMgdiA1NS41MDc4MSBIIDk5LjE3ODYxOSBWIDIwOC45NjY5IGwgLTEwLjMxMjUsNy4wMzEyNSAtNi41NjI1LC05LjYwOTM3IHogbSA0OS40NTMxMiwzMS4wMTU2MiBxIC0zLjUxNTYyLDEuNDg0MzggLTUuMzkwNjIsMy43MTA5NCAtMS44NzUsMi4xODc1IC0xLjg3NSw0Ljg0Mzc1IDAsMy4xNjQwNiAyLjIyNjU2LDUuMzEyNSAyLjIyNjU2LDIuMTQ4NDQgNS41NDY4NywyLjE0ODQ0IDMuMjgxMjUsMCA1LjQ2ODc1LC0yLjE0ODQ0IDIuMTg3NSwtMi4xODc1IDIuMTg3NSwtNS40Njg3NSAwLC0yLjczNDM4IC0yLjAzMTI1LC00Ljg0Mzc1IC0yLjAzMTI1LC0yLjEwOTM4IC02LjEzMjgxLC0zLjU1NDY5IHogbSAxMC45NzY1NiwtNC45NjA5NCBxIDUuNDY4NzUsMi4xMDkzOCA4LjI0MjE5LDUuNjY0MDcgMi44MTI1LDMuNTU0NjggMi44MTI1LDguNTE1NjIgMCw3LjUgLTUuNzgxMjUsMTIuMDMxMjUgLTUuNzgxMjUsNC41MzEyNSAtMTUuNTA3ODEsNC41MzEyNSAtOS43NjU2MywwIC0xNS42MjUsLTQuNDUzMTIgLTUuODIwMzEsLTQuNDUzMTMgLTUuODIwMzEsLTExLjcxODc1IDAsLTUuMjM0MzggMi45Mjk2OCwtOC44MjgxMyAyLjk2ODc1LC0zLjYzMjgxIDguMzU5MzgsLTUgLTQuODA0NjksLTEuOTE0MDYgLTcuMjI2NTYsLTUuMTk1MzEgLTIuMzgyODIsLTMuMjgxMjUgLTIuMzgyODIsLTcuODUxNTYgMCwtNi43OTY4OCA1LjQyOTY5LC0xMC44OTg0NCA1LjQyOTY5LC00LjE0MDYzIDE0LjQ5MjE5LC00LjE0MDYzIDkuMTAxNTYsMCAxNC4yNTc4MSwzLjk4NDM4IDUuMTk1MzEsMy45NDUzMSA1LjE5NTMxLDEwLjg5ODQ0IDAsNC4xNzk2OCAtMi40NjA5Myw3LjQ2MDkzIC0yLjQ2MDk0LDMuMjQyMTkgLTYuOTE0MDcsNSB6IG0gLTkuNzY1NjIsLTMuODI4MTIgcSAzLjM1OTM3LC0xLjYwMTU2IDQuODgyODEsLTMuNTE1NjMgMS41MjM0NCwtMS45NTMxMiAxLjUyMzQ0LC00LjU3MDMxIDAsLTIuNjE3MTkgLTEuOTUzMTMsLTQuMzM1OTQgLTEuOTE0MDYsLTEuNzE4NzUgLTQuOTIxODcsLTEuNzE4NzUgLTMuMDA3ODEsMCAtNC45NjA5NCwxLjc5Njg4IC0xLjkxNDA2LDEuNzU3ODEgLTEuOTE0MDYsNC40OTIxOSAwLDIuODEyNSAxLjkxNDA2LDQuODgyODEgMS45MTQwNiwyLjAzMTI1IDUuNDI5NjksMi45Njg3NSB6IG0gNTYuOTE0MDYsNC40MTQwNiBxIDUuNDY4NzUsMS40MDYyNSA4LjI4MTI1LDQuNjg3NSAyLjgxMjUsMy4yODEyNSAyLjgxMjUsOC4xNjQwNiAwLDcuNjE3MTkgLTYuODM1OTQsMTIuMDcwMzIgLTYuNzk2ODcsNC40MTQwNiAtMTguNjcxODcsNC40MTQwNiAtMy42NzE4OCwwIC03LjM0Mzc1LC0wLjQ2ODc1IC0zLjYzMjgxLC0wLjQ2ODc1IC03LjMwNDY5LC0xLjQ0NTMxIGwgMC44MjAzMSwtMTEuNTIzNDQgcSAzLjAwNzgyLDEuNDg0MzcgNi4yODkwNywyLjIyNjU2IDMuMjgxMjUsMC43NDIxOSA2LjgzNTkzLDAuNzQyMTkgNS40Njg3NSwwIDguNTU0NjksLTEuOTE0MDYgMy4xMjUsLTEuOTUzMTMgMy4xMjUsLTUuMjczNDQgMCwtMy4wNDY4OCAtMi4zODI4MSwtNC42NDg0NCAtMi4zNDM3NSwtMS42MDE1NiAtNi44MzU5NCwtMS42MDE1NiBoIC02Ljg3NSB2IC05Ljc2NTYzIGggNi4zMjgxMyBxIDQuMTc5NjgsMCA2Ljc1NzgxLC0xLjcxODc1IDIuNTc4MTIsLTEuNzE4NzUgMi41NzgxMiwtNC40NTMxMiAwLC0yLjg5MDYzIC0yLjYxNzE4LC00LjYwOTM4IC0yLjYxNzE5LC0xLjc1NzgxIC03LjAzMTI1LC0xLjc1NzgxIC0zLjIwMzEzLDAgLTYuNDg0MzgsMC42MjUgLTMuMjgxMjUsMC42MjUgLTYuNTYyNSwxLjgzNTk0IGwgLTAuNjY0MDYsLTEwLjMxMjUgcSA0LjEwMTU2LC0xLjIxMDk0IDguMjgxMjUsLTEuNzk2ODggNC4yMTg3NSwtMC42MjUgOC41OTM3NSwtMC42MjUgOS42ODc1LDAgMTUuMDM5MDYsMy45ODQzOCA1LjM5MDYzLDMuOTg0MzcgNS4zOTA2MywxMS4wNTQ2OSAwLDQuNTMxMjUgLTIuNTc4MTMsNy42MTcxOCAtMi41MzkwNiwzLjA0Njg4IC03LjUsNC40OTIxOSB6IgogICAgIGlkPSJ0ZXh0OCIKICAgICBhcmlhLWxhYmVsPSIwMTgzIiAvPgo8L3N2Zz4K">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding-left: 16px;
+            padding-right: 16px;
+
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 44px;
+            font-weight: bolder;
+            margin: 0px;
+        }
+
+        h2 {
+            margin-top: 0px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            cursor: not-allowed !important;
+        }
+
+        .startupButton {
+            border: 1px, solid, white;
+            background: #3836a3;
+            color: white;
+            padding: 8px 16px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .actionButton {
+            color: white;
+            background-color: transparent;
+            border: 2px solid white;
+            border-radius: 32px;
+            font-weight: bold;
+            padding: 3px 12px;
+        }
+
+        .actionButtonWithHoverStyle:hover {
+            background-color: #4f81be;
+        }
+
+        .actionButton:disabled {
+            color: gray;
+            background-color: transparent;
+            border: 2px solid gray;
+            border-radius: 32px;
+            font-weight: bold;
+            padding: 3px 12px;
+            cursor: not-allowed;
+        }
+
+        .invertedActionButton {
+            color: #3836a3;
+            background-color: white;
+            border: 2px, solid, #3836a3;
+            border-radius: 32px;
+            font-weight: bold;
+            padding: 3px 12px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        table {
+            border: 2px solid white;
+            border-collapse: collapse;
+        }
+
+        th {
+            white-space: nowrap;
+            font-size: 18px;
+            border: 1px solid white;
+            padding: 4px;
+        }
+
+        .bgBlue {
+            background-color: #235594 !important;
+            color: #fff;
+        }
+
+        .statusBox {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .statusItem {
+            padding: 3px 12px;
+            border-radius: 8px;
+            font-weight: bolder;
+            text-align: center;
+            font-family: monospace;
+            min-width: 20ch;
+        }
+
+        .questionStatus {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .positiveStatus {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .negativeStatus {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .modalPadding {
+            padding: 16px !important;
+        }
+
+        .startupStyle {
+            padding: 12px !important;
+            border-radius: 8px !important;
+            width: 250px !important;
+        }
+
+        header {
+            margin-left: -16px;
+            margin-right: -16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid white;
+        }
+
+        .headerContent {
+            padding-left: 16px;
+            padding-right: 16px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 4px
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 16px;
+            margin: 0;
+        }
+
+        nav button {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            background-color: transparent;
+            border: none;
+        }
+
+        nav button:disabled {
+            text-decoration: none;
+            color: gray;
+            font-weight: 500;
+            background-color: transparent;
+            border: none;
+        }
+
+        .dangerButton {
+            background-color: #856404 !important;
+            margin-left: 32px;
+            margin-right: 32px;
+        }
+
+        .headerTitle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-left: 16px;
+        }
+
+        .noBorder {
+            border: none;
+        }
+
+        .button-like {
+            cursor: pointer;
+        }
+
+        td {
+            border: 1px solid white;
+            padding: 4px;
+        }
+
+        .readerTableRow:hover {
+            background-color: #4f81be;
+        }
+
+        .invertedReaderTableRow {
+            color: #235594;
+            background-color: white;
+        }
+
+        .container {
+            padding-left: 8px;
+            display: flex;
+        }
+
+        .item {
+            flex: 100%;
+            height: 100%;
+        }
+
+        .item25 {
+            flex: 0 0 25%;
+            height: 100%;
+        }
+
+        .dynamicField {
+            border-radius: 8px;
+            background-color: #DDD;
+            margin-top: 8px;
+        }
+
+        .tableHeadAsc {
+            background-color: green;
+        }
+
+        .tableHeadDsc {
+            background-color: red;
+        }
+
+        .rightMargin {
+            margin-right: 8px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        /* Tooltip text */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 420px;
+            background-color: black;
+            color: white;
+            border-radius: 2px;
+            padding: 4px;
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: pre-line;
+            /* Allows line breaks */
+            pointer-events: none;
+            /* Avoid interfering with clicks/taps */
+        }
+
+        /* Show the tooltip when hovering or tapping */
+        .tooltip:hover .tooltiptext,
+        .tooltip.active .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modl {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: #000;
+            background-color: rgba(0, 0, 0, .4)
+        }
+
+        .modl-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 60%;
+            font-weight: 700;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: .4s;
+            animation-name: animatetop;
+            animation-duration: .4s
+        }
+
+        .modl-body {
+            padding: 2px 16px;
+            color: #303742
+        }
+
+        .clse {
+            color: #000;
+            float: right;
+            font-size: 28px;
+            font-weight: 700
+        }
+
+        .clse:focus,
+        .clse:hover {
+            color: #5bc8af;
+            text-decoration: none;
+            cursor: pointer
+        }
+
+
+        html {
+            font-family: sans-serif;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%
+        }
+
+        body {
+            margin: 0
+        }
+
+        header,
+        nav {
+            display: block
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: .67em 0
+        }
+
+        hr {
+            box-sizing: content-box;
+            height: 0;
+            overflow: visible
+        }
+
+        a {
+            background-color: transparent;
+            -webkit-text-decoration-skip: objects
+        }
+
+        a:active,
+        a:hover {
+            outline-width: 0
+        }
+
+        pre {
+            font-family: "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace;
+            font-size: 1em
+        }
+
+        img {
+            border-style: none
+        }
+
+        svg:not(:root) {
+            overflow: hidden
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0
+        }
+
+        button,
+        input {
+            overflow: visible
+        }
+
+        button,
+        select {
+            text-transform: none
+        }
+
+        button,
+        html [type=button] {
+            -webkit-appearance: button
+        }
+
+        button::-moz-focus-inner {
+            border-style: none;
+            padding: 0
+        }
+
+        textarea {
+            overflow: auto
+        }
+
+        html {
+            box-sizing: border-box;
+            font-size: 20px;
+            line-height: 1.5;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        body {
+            background: #fff;
+            color: #3b4351;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            font-size: .8rem;
+            overflow-x: hidden;
+            text-rendering: optimizeLegibility
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: inherit;
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 0;
+            margin-top: 0
+        }
+
+        h1 {
+            font-size: 2rem
+        }
+
+        h2 {
+            font-size: 1.6rem
+        }
+
+        h3 {
+            font-size: 1.4rem
+        }
+
+        p {
+            margin: 0 0 1.2rem
+        }
+
+        a,
+        u {
+            -webkit-text-decoration-skip: ink edges;
+            text-decoration-skip: ink edges
+        }
+
+        .table.table-striped tbody tr:nth-of-type(odd) {
+            background: #f7f8f9
+        }
+
+        .table tbody tr.active,
+        .table.table-striped tbody tr.active {
+            background: #eef0f3
+        }
+
+        .table.table-hover tbody tr:hover {
+            background: #eef0f3
+        }
+
+        .table td,
+        .table th {
+            border-bottom: .05rem solid #dadee4;
+            padding: .6rem .4rem
+        }
+
+        .table th {
+            border-bottom-width: .1rem
+        }
+
+        .dropdown.active .menu {
+            display: block
+        }
+
+        .menu .menu-item>a.active {
+            background: #f1f1fc;
+            color: #5755d9
+        }
+
+        a.text-light:focus,
+        a.text-light:hover {
+            color: #f2f2f2
+        }
+
+        a.text-light:visited {
+            color: #fff
+        }
+
+        a.text-dark:focus,
+        a.text-dark:hover {
+            color: #303742
+        }
+
+        a.text-dark:visited {
+            color: #455060
+        }
+
+        .bg-dark {
+            background: #1d1d1b !important;
+            color: #fff
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column
+        }
+
+        .clse {
+            color: #000;
+            float: right;
+            font-size: 28px;
+            font-weight: 700
+        }
+
+        .clse:focus,
+        .clse:hover {
+            color: #5bc8af;
+            text-decoration: none;
+            cursor: pointer
+        }
+
+        .back_link span {
+            padding-left: 10px
+        }
+
+        h3.setting-title {
+            font-size: 20px;
+            text-align: center;
+            padding-bottom: 0px
+        }
+
+        #devicetable .table th {
+            color: #235594
+        }
+
+        #health-monitoring-cont .stats-block label {
+            color: #fff;
+            font-weight: 700;
+            font-size: 17px;
+            padding-right: 10px
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #235594;
+            color: white;
+            padding: 1px;
+            border-top: 1px solid #fff
+        }
+
+        #displayContent {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #consoleContent {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            max-height: calc(100vh - 210px);
+            border: 2px solid white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        #pageContent {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        #transmitContent {
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            padding: 6px 8px;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            border: 2px solid white;
+            border-radius: 8px;
+        }
+
+        .consoleEntry {
+            padding: 0px;
+            margin: 0px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .transmitLabel {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 14px;
+            white-space: nowrap;
+            padding: 0 8px;
+            flex-shrink: 0;
+        }
+
+        .transmitInput {
+            flex: 1;
+            background-color: #ffffff;
+            border: none;
+            outline: none;
+            padding: 6px 10px;
+            font-size: 14px;
+            color: #1a1a1a;
+            border-radius: 2px;
+            height: 28px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body class="bgBlue" style="min-height: calc(100vh - 36px);">
+    <header>
+        <div class="headerContent">
+            <svg id="Layer_1" height="36" width="64" viewBox="0 0 182.90038 102.59961" version="1.1"
+                sodipodi:docname="logo white on tranparent.svg" xml:space="preserve"
+                inkscape:version="1.4.2 (f4327f4, 2025-05-13)" width="182.90038" height="102.59961"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+                xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
+                xmlns:svg="http://www.w3.org/2000/svg">
+                <defs id="defs5" />
+                <style id="style1">
+                    .st0 {
+                        fill: #1d1d1b
+                    }
+
+                    .st1 {
+                        fill: #fff
+                    }
+                </style>
+                <style id="style1-8">
+                    .st0 {
+                        fill: #1d1d1b
+                    }
+
+                    .st1 {
+                        fill: #fff
+                    }
+                </style>
+                <path id="path1-8" class="st0"
+                    d="M 5.6015632,0 C 2.5015629,0 0,2.499609 0,5.599609 V 97.000002 C 0,100.1 2.5015629,102.59961 5.6015632,102.59961 H 177.30076 c 3.1,0 5.59961,-2.49961 5.59961,-5.599608 V 5.701172 C 182.90037,2.601172 180.30115,0 177.20115,0 Z M 40.900392,8.9003911 h 4.599609 V 26.900391 h -4.599609 z m 47.90039,0 h 4.599601 V 26.900391 h -4.599601 z m 10.300772,0 h 22.999996 v 3.3007809 h -9.20118 v 14.699219 h -4.59961 V 12.201172 h -9.199206 z m 33.499996,0 h 4.5 l 11.5,17.9999999 h -5.20118 L 140.99998,23 h -12.69922 l -2.30078,3.900391 h -4.59961 z m 22.39843,0 h 4.60157 V 23.599609 h 15 v 3.300782 H 154.99998 Z M 8.2011724,9.0000011 H 21.000001 c 3.6,0 6.400391,0.800781 8.400391,2.3007809 2,1.5 3,3.7 3,6.5 0,1.7 -0.399219,3.1 -1.199219,4.5 -0.8,1.4 -1.900781,2.399219 -3.300781,3.199219 -0.8,0.5 -1.899219,0.899609 -3.199219,1.099609 -1.1,0.2 -2.7,0.300782 -4.5,0.300782 -0.1,0 -0.300391,-3.91e-4 -0.400391,0.09961 H 8.2011724 Z m 52.0996096,0 h 13.800782 c 1.9,0 3.198437,0.300391 3.898437,0.900391 0.6,0.5999999 1,1.6992179 1,3.1992179 v 0.400391 l -4.5,0.701172 v -2 h -14.5 v 11.298828 h 14.5 v -4 h -7.599609 v -3.099609 h 12.099609 v 6.199218 c 0,1.7 -0.3,2.800391 -1,3.400391 -0.7,0.6 -1.998437,0.900391 -3.898437,0.900391 H 60.300782 c -2,0 -3.30039,-0.300782 -3.90039,-0.800782 -0.6,-0.6 -1,-1.798437 -1,-3.398437 v -9.400391 c 0,-1.7 0.3,-2.800391 1,-3.4003899 0.6,-0.6 2.00039,-0.900391 3.90039,-0.900391 z m -47.5,3.2011719 V 23.59961 h 7.400391 c 2.5,-0.1 4.300391,-0.598828 5.400391,-1.298828 1.3,-1 2,-2.4 2,-4.5 0,-1.9 -0.601172,-3.301172 -1.701172,-4.201172 -1.1,-0.9 -2.700391,-1.398437 -4.900391,-1.398437 z m 121.900368,0.199219 -0.0996,0.09961 -4.4004,7.201172 h 4.4004 4.39843 z m -126.3007586,19.5 H 9.2011726 V 44.500001 H 8.4003914 Z m 2.2011726,0 h 2.398437 v 12.599609 h -2.398437 z m 5.298828,0 h 0.800781 v 12.599609 h -0.800781 z m 3.701172,0 h 0.798828 v 12.599609 h -0.798828 z m 2.099609,0 h 2.400391 V 44.5 h -2.400391 z m 3.798828,0 h 0.800781 v 12.599609 h -0.800781 z m 2.201172,0 h 0.798828 V 44.5 h -0.798828 z m 3.699219,0 h 0.800781 v 12.599609 h -0.800781 z m 2.099609,0 h 2.400391 v 12.599609 h -2.400391 z m 3.701172,0 h 0.798828 V 44.5 h -0.798828 z m 2.199219,0 h 0.800781 v 12.599609 h -0.800781 z m 3.701172,0 h 0.798828 v 12.599609 h -0.798828 z m 2.099609,0 h 0.798828 V 44.5 h -0.798828 z m 3.798828,0 h 0.800781 v 12.599609 h -0.800781 z m 2.101563,0 h 0.798828 v 12.599609 h -0.798828 z m 2.099609,0 h 2.400391 V 44.5 h -2.400391 z m 3.798828,0 h 0.800781 v 12.599609 h -0.800781 z m 3.701172,0 h 2.400391 V 44.5 h -2.400391 z m 3.699219,0 h 0.800781 v 12.599609 h -0.800781 z m 2.201172,0 h 0.798828 v 12.599609 h -0.798828 z m 2.099609,0 h 2.400391 V 44.5 h -2.400391 z m 5.298828,0 h 0.800781 v 12.599609 h -0.800781 z m 2.201172,0 h 0.798828 V 44.5 h -0.798828 z m 2.099609,0 h 0.800782 v 12.599609 h -0.800782 z m 2.09961,0 h 0.800781 v 12.599609 h -0.800781 z m 2.201172,0 h 2.398437 v 12.599609 h -2.398437 z m 3.798828,0 h 0.800781 v 12.599609 h -0.800781 z m 3.599609,0 h 0.800777 v 12.599609 h -0.800777 z m 2.201167,0 h 0.798825 v 12.599609 h -0.798825 z m 2.199215,0 h 0.80078 v 12.599609 h -0.80078 z m 3.599605,0 h 0.800776 v 12.599609 h -0.800776 z m 2.201162,0 h 2.4004 v 12.599609 h -2.4004 z m 3.79883,0 h 0.80078 v 12.599609 h -0.80078 z m 2,0 h 0.80078 v 12.599609 h -0.80078 z m 3.80078,0 h 0.80079 v 12.599609 h -0.80079 z m 2.19922,0 h 2.40039 v 12.599609 h -2.40039 z m 3.70117,0 h 0.79883 v 12.599609 h -0.79883 z m 2.09961,0 h 0.80079 v 12.599609 h -0.80079 z m 3.80079,0 h 0.79882 v 12.599609 h -0.79882 z m 2,0 h 2.39843 v 12.599609 h -2.39843 z m 3.79882,0 h 0.80078 v 12.599609 h -0.80078 z m 2.20118,0 h 0.79882 v 12.599609 h -0.79882 z m 3.69921,0 h 0.80079 v 12.599609 h -0.80079 z m 2.09961,0 h 2.40039 v 12.599609 h -2.40039 z m 3.80078,0 h 0.79883 v 12.599609 h -0.79883 z m 2.09961,0 h 0.80079 v 12.599609 h -0.80079 z m 2.09961,0 h 2.40039 v 12.599609 h -2.40039 z m 5.40039,0 h 0.80079 v 12.599609 h -0.80079 z m 2.09961,0 h 0.80078 v 12.599609 h -0.80078 z m 2.09961,0 h 0.80078 v 12.599609 h -0.80078 z m 2.20117,0 h 2.4004 v 12.599609 h -2.4004 z m 5.29883,0 h 0.80078 v 12.599609 h -0.80078 z m 2.10157,0 h 0.79882 v 12.599609 h -0.79882 z m 2.19921,0 h 2.40039 v 12.599609 h -2.40039 z m 5.30079,0 h 0.79882 v 12.599609 h -0.79882 z m 2.90039,0 h 0.79882 v 12.599609 h -0.79882 z M 96.701163,49.000003 c 1.399995,0 2.799211,0.10078 4.199207,0.30078 1.3,0.2 2.60039,0.50039 3.90039,0.90039 v 10.39844 c -0.8,-0.4 -1.7,-0.69844 -2.5,-0.89844 -0.8,-0.2 -1.60039,-0.30078 -2.400386,-0.30078 -2.699991,0 -4.799201,1 -6.199211,3 -1.399985,2 -2.099595,5.00039 -2.099595,8.90039 0,3.7 0.6996,6.59961 2.099595,8.59961 1.40001,2 3.4004,3 5.900391,3 0.899996,0 1.799206,-0.20039 2.699206,-0.40039 0.8,-0.2 1.7,-0.5 2.5,-1 v 10.70117 c -1.4,0.6 -2.60039,0.89922 -3.90039,1.19922 -1.199996,0.3 -2.399212,0.40039 -3.699207,0.40039 -2.39999,0 -4.799985,-0.40078 -6.999995,-1.30078 -2.299994,-0.8 -4.301167,-2.09883 -6.201167,-3.79883 -2.3,-2 -3.9,-4.50039 -5,-7.40039 -1.1,-2.9 -1.599609,-6.40078 -1.599609,-10.30078 0,-6.5 1.80039,-11.80039 5.40039,-15.90039 3.6,-4 8.300396,-6.09961 13.900381,-6.09961 z M 8.3007814,49.800783 H 22.601564 l 3.699218,13.29883 3.699219,-13.29883 h 14.300781 l -11.300781,25.79883 v 17.40039 h -13.5 v -17.40039 z m 42.5996106,0 h 7.701172 7.599609 l 10.599609,43.19922 H 63.601564 l -1,-6.40039 h -8 l -1,6.40039 H 40.300782 Z m 57.999978,0 h 13.59961 v 15.5 h 5.80078 v -15.5 h 13.5 v 43.19922 h -13.5 v -16.90039 h -5.80078 v 16.90039 h -13.59961 z m 36,0 h 29.70118 v 11 h -8.10157 v 32.19922 H 152.90037 V 60.800782 h -8 z m -86.400369,12.09961 -2.599609,16 h 2.701172 2.699218 l -2.800781,-15.80078 z"
+                    style="display:inline;fill:#ffffff" />
+                <g id="g5-5" transform="translate(6.9791847,-0.5502035)" style="fill:#00ff00" />
+            </svg>
+            <h1 id="pageHead">NMEA 0183 Display Program</h1>
+            <nav>
+                <ul>
+                    <li><button id="headButtonPausePlayBtn" class="actionButton actionButtonWithHoverStyle">Pause
+                            Scrolling</button></li>
+                    <li><button id="headButtonStartLogBtn" class="actionButton actionButtonWithHoverStyle">Start
+                            Log</button></li>
+                    <li><button id="headButtonSaveLogBtn" class="actionButton actionButtonWithHoverStyle">Save
+                            Log</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- status & actions -->
+    <div class="statusBox">
+
+        <span id="baudRateOutput" class="questionStatus statusItem">Baud Rate: ???</span>
+        <span id="sentanceCountOutput" class="questionStatus statusItem">Sentances: 0</span>
+        <span id="bandwidthOutput" class="questionStatus statusItem">Bandwidth: XX%</span>
+
+    </div>
+
+    <!-- page content -->
+    <div id="pageContent">
+
+        <!-- display content -->
+        <div id="displayContent">
+
+            <!-- n0183 output -->
+            <div id="consoleContent"></div>
+
+            <!-- transmit section -->
+            <div id="transmitContent" class="transmit-bar">
+                <span class="transmitLabel">Transmit Sentence</span>
+                <input id="msgToTransmit" class="transmitInput" type="text" placeholder="" />
+                <button id="transmitSentanceBtn" class="actionButton actionButtonWithHoverStyle">Send</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- startup modal -->
+    <div id="startupModal" class="modl" style="display: none;">
+        <div class="modl-content">
+            <div class="modl-body modalPadding">
+
+                <h2>Welcome to the NMEA 0183 Display Program</h2>
+
+                <p>Please connect to your device using the blue "Connect" button below.</p>
+                <p>Your browser will prompt you to select a device, and list the COM Ports that it has found. You will
+                    want to connect to whichever device name your operating system has allocated to your NMEA to USB
+                    cable.</p>
+                <p>Use the "Auto Detect and Connect" function to connect to your device, this will take up to 10 seconds
+                    as we try to detect the BaudRate of the device.</p>
+
+                <select id="startupMethod" class=" startupStyle ">
+                    <option value="find" default="">Auto Detect and Connect</option>
+                    <option value="4800">Connect to Baud 4800</option>
+                    <option value="38400">Connect to Baud 38400</option>
+                    <option value="115200">Connect to Baud 115200</option>
+                    <option value="230400">Connect to Baud 230400</option>
+                </select>
+                <button id="startupActionBtn" class="startupStyle startupButton">Connect</button>
+
+                <div style="padding-top:16px;height:48px;width: 100%;">
+                    <span id="startupStatusOutput" class="questionStatus statusItem">
+                        Waiting for user to connect...
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- error modal -->
+    <div id="errorModal" class="modl" style="display: none;">
+        <div class="modl-content">
+            <div class="modl-body modalPadding">
+
+                <h2>Incompatible Browser</h2>
+                <p>Incorrect browser type, please download a Chromium, Edge or Opera browser</p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer>
+        <div class="headerContent">
+            <span>
+                © Digital Yacht 2026
+            </span>
+
+            <span>
+                NMEA 0183 Display Web App Version 1.0.0
+            </span>
+        </div>
+    </footer>
+
+    <script>
+
+        // HTML/CSS consts
+        const STYLE_HIDE = "display: none;";
+        const DISA = "disabled";
+
+        // js consts
+        const braudRates = [
+            230400,
+            4800,
+            38400,
+            115200,
+        ];
+        const LoggingEvent = "LOG_EVENT";
+        const timeToTest = 2500; // 2.5s
+        const jsCrLf = "\r\n";
+
+        // modal defs
+        const startupModal = document.getElementById("startupModal");
+        const errorModal = document.getElementById("errorModal");
+
+        // btn defs
+        const startupActionBtn = document.getElementById('startupActionBtn');
+        const headButtonPausePlayBtn = document.getElementById('headButtonPausePlayBtn');
+        const headButtonStartLogBtn = document.getElementById('headButtonStartLogBtn');
+        const headButtonSaveLogBtn = document.getElementById('headButtonSaveLogBtn');
+        const transmitSentanceBtn = document.getElementById('transmitSentanceBtn');
+
+        // elem defs
+        const consoleContent = document.getElementById('consoleContent');
+        const msgToTransmit = document.getElementById('msgToTransmit');
+
+        // output defs
+        const baudRateOutput = document.getElementById('baudRateOutput');
+        const sentanceCountOutput = document.getElementById('sentanceCountOutput');
+        const bandwidthOutput = document.getElementById('bandwidthOutput');
+
+        // js inits
+        let verbose = false;
+        let port = null;
+        let writer = null;
+        let reader = null;
+        let readableStream = null;
+        let currentBaudRate = null;
+        let msgLog = "";
+        let recordLog = "";
+        let tempMsgLog = "";
+        let isRecordingPgnMsgs = false;
+        let isConsoleScrolling = true;
+        let sentanceCount = 0;
+
+        // ///////// /// //// //// /// ////// //
+        // functions run once page has loaded //
+        doStartupChecks();
+        // functions run once page has loaded //
+        // ///////// /// //// //// /// ////// //
+
+        startupActionBtn?.addEventListener("click", async function () {
+            let clearElem = true;
+            const startupMethodElem = document.getElementById("startupMethod");
+            const startMethod = startupMethodElem.value;
+            startupActionBtn.setAttribute(DISA, true);
+
+            if (isNaN(startMethod)) { // scan
+                let res = await _scan();
+                if (res.scanPassed) {
+                    setOutputClassList(startupStatusOutput, "positiveStatus", "Connecting...");
+                    try {
+                        await _connect();
+                    } catch (e) {
+                        clearElem = false;
+                        console.error(e);
+                    }
+                } else {
+                    clearElem = false;
+                }
+            } else { // is a number
+                // direct connect
+                try {
+                    setOutputClassList(startupStatusOutput, "positiveStatus", "Connecting...");
+                    currentBaudRate = Number(startMethod);
+                    await _connect();
+                } catch (e) {
+                    clearElem = false;
+                    console.error(e);
+                }
+            }
+
+            // hide & reset elem
+            if (clearElem) { // reset to starting state then hide
+                startupActionBtn.removeAttribute(DISA);
+                setOutputClassList(startupStatusOutput, "questionStatus", "Waiting for user to connect...");
+                document.getElementById("startupModal").style = "display: none;";
+                setInterval(bandwidthCalculator, 1000);
+                // heartbeatTestTimeout = setTimeout(validateHeartbeat, 10000); // start checking for heart beat after 10 secs
+                // setTimeout(sendIsoRequestMsgs, 500);
+
+            } else { // output error, dont hide
+                startupActionBtn.removeAttribute(DISA);
+                setOutputClassList(startupStatusOutput, "negativeStatus", "Error connecting to your device, please refresh the page (CTRL + F5)");
+            }
+        });
+
+        headButtonPausePlayBtn?.addEventListener("click", async function () {
+            isConsoleScrolling = !isConsoleScrolling;
+            if (isConsoleScrolling) {
+                headButtonPausePlayBtn.innerHTML = "Pause Scrolling";
+            } else {
+                headButtonPausePlayBtn.innerHTML = "Start Scrolling";
+            }
+        });
+
+        headButtonStartLogBtn?.addEventListener("click", async function () {
+            isRecordingPgnMsgs = !isRecordingPgnMsgs
+            if (isRecordingPgnMsgs) {
+                headButtonStartLogBtn.innerHTML = "Stop Log";
+            } else {
+                headButtonStartLogBtn.innerHTML = "Start Log";
+            }
+        });
+
+        headButtonSaveLogBtn?.addEventListener("click", async function () {
+            const dtNow = String(new Date().toISOString().split('.')[0]);
+            const filename = `NMEA0183 PGN message log - ${dtNow}.txt`;
+            saveFile(recordLog, filename);
+        });
+
+        transmitSentanceBtn?.addEventListener("click", handleMsgTransmit);
+
+        msgToTransmit.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleMsgTransmit();
+        });
+
+        function handleMsgTransmit() {
+            const msg = msgToTransmit.value;
+            msgToTransmit.value = "";
+            doMsgSend(msg);
+        }
+
+        function doStartupChecks() {
+            if (navigator?.serial?.requestPort) { // good outcome
+                console.info('user is running a compatible browser :)');
+                startupModal.style = "display: block;";
+            } else { // bad outcome
+                console.warn('user is not running a compatible browser :(');
+                alert("Error: incorrect browser type, please use Chromium, Edge or Opera");
+                document.getElementById("errorModal").style = "display: block;";
+            }
+
+            // 100 ms delay to allow css to load
+            if (window.innerHeight > window.innerWidth) setTimeout(alert("This page is best viewed in landscape mode."), 100);
+        }
+
+        function hideStartModal() {
+            startupModal.style = STYLE_HIDE;
+        }
+
+        async function _scan() {
+            let res = null;
+            let scanPassed = true;
+            try {
+                res = await entrypoint_doScan(false);
+            } catch (e) {
+                scanPassed = false;
+                console.error(e);
+            } finally {
+                if (res?.braudRate) {
+                    setBaudRate(res.braudRate);
+                    setOutputClassList(baudRateOutput, "positiveStatus");
+                } else {
+                    setBaudRate(null);
+                    setOutputClassList(baudRateOutput, "negativeStatus");
+                    setOutputClassList(startupStatusOutput, "negativeStatus", "Scan failed, please check the device");
+                    scanPassed = false;
+                }
+            }
+            return { scanPassed, res };
+        }
+
+        async function entrypoint_doScan(doCleanup = true) {
+            let testResults = [];
+            let recommendedBraud = { responses: 0 };
+
+            doLog("prompting user...")
+            port = await navigator.serial.requestPort();
+            doLog(`user has selected a port!`);
+            isScanning = true;
+            handleStartupCountdown(true);
+
+            for (const index in braudRates) {
+                const rate = braudRates[index];
+                let scanRes = 0;
+
+                doLog(`\n---------------------------------------------------------`);
+                doLog(`testing: ${rate}`);
+
+                try {
+                    scanRes = await handlePortScanTest(rate); // do test
+                    doLog(`${rate} completed successfully with ${scanRes} valid responses`);
+                } catch (err) {
+                    doLog(`error occurred when scanning ${rate}: ${err.message}`, 'error');
+                    scanRes = 0;
+                } finally {
+
+                    await disconnectReader();
+                    await disconnectPort(false);
+
+                    // add small delay to ensure port is 100% closed before next test
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                testResults.push({
+                    braudRate: rate,
+                    responses: scanRes,
+                });
+
+                if (scanRes > 1) break; // quick exit if we have 2 or more valid results
+            }
+
+            isScanning = false;
+
+            // cleanup
+            if (doCleanup) await disconnectAll();
+
+            // result output
+            doLog(" ");
+            doLog("=======================================");
+            doLog("SCAN RESULTS BELOW: ===================");
+            doLog("=======================================");
+            doLog(" ");
+
+            testResults.forEach(result => {
+                doLog(`${result.braudRate} returned ${result.responses} valid responses`);
+                if (result.responses > recommendedBraud.responses) recommendedBraud = result;
+            })
+
+            if (recommendedBraud.braudRate) doLog(`\n${recommendedBraud.braudRate} returned the most valid responses (${recommendedBraud.responses})`);
+            else doLog("\nno results...");
+
+            doLog(" ");
+            doLog("=======================================");
+            doLog("TEST COMPLETE :) ======================");
+            doLog("=======================================");
+
+            return recommendedBraud;
+        }
+
+        function handleStartupCountdown(firstIteration = false) {
+            if (firstIteration) timerIteration = 0;
+            const elem = document?.getElementById("startupStatusOutput");
+            if (elem && isScanning) {
+
+                const aSecond = 1000;
+                // const totalTimeToTestInSecs = parseInt(timeToTest * braudRates.length / aSecond);
+                const testTimeRemaining = timerIteration; // was a count down now a count up
+
+                let newElemClass = "positiveStatus";
+                let newElemOutput = `Scanning for baud rate, this has taken ${testTimeRemaining} seconds...`;
+
+                elem.classList = `statusItem ${newElemClass}`;
+                elem.innerHTML = newElemOutput;
+
+                timerIteration++;
+                setTimeout(handleStartupCountdown, aSecond);
+            }
+        }
+
+        function doLog(message, level = 'log') {
+            document.dispatchEvent(new CustomEvent(LoggingEvent, {
+                detail: {
+                    message: message,
+                    level: level,
+                    timestamp: new Date().toISOString(),
+                }
+            }));
+            // debug
+            if (verbose) handleVerboseLog(message, new Date().getTime(), level);
+        }
+
+        function handleVerboseLog(message, time, level = 'log') {
+            message = `Verbose @ ${time.toString().slice(-7)} ↓↓↓\n${message}`;
+            switch (level[0].toLowerCase()) {
+                case 'i': console.info(message); break;
+                case 'w': console.warn(message); break;
+                case 'e': console.error(message); break;
+                default: console.log(message); break; // includes l
+            }
+        }
+
+        async function handlePortScanTest(passedBaudRate) {
+            let buffer = "";
+            const controller = new AbortController();
+            const signal = controller.signal;
+
+            const timeoutId = setTimeout(() => {
+                doLog("timeout reached, aborting read");
+                controller.abort();
+            }, timeToTest);
+
+            try {
+                await connectToPortAndSetUpReader(passedBaudRate);
+                const testStartTime = Date.now();
+
+                while (Date.now() < testStartTime + timeToTest) {
+                    const { value, done } = await reader.read({ signal });
+
+                    if (done) {
+                        doLog("stream closed by device");
+                        break;
+                    }
+
+                    if (value) {
+                        doLog(`received: ${value}`);
+                        buffer += value;
+                    }
+                }
+            } catch (err) {
+                if (err.name === "AbortError") {
+                    doLog("read aborted (timeout), baud rate scan complete");
+                } else if (err.message?.toLowerCase().includes("break")) {
+                    doLog(`break signal received — baud rate ${passedBaudRate} is likely wrong`);
+                } else {
+                    doLog(`read error at ${passedBaudRate} baud: ${err.message}`, "error");
+                }
+                // All errors mean this baud rate didn't work — fall through to cleanup
+            } finally {
+                clearTimeout(timeoutId);
+                // Always clean up so the next baud rate attempt starts fresh
+                try {
+                    await reader.cancel();
+                    reader.releaseLock();
+                } catch (_) { }
+                try {
+                    await port.close();
+                } catch (_) { }
+            }
+
+            const matches1 = buffer.split("!").length - 1;
+            const matches2 = buffer.split("$").length - 1;
+            const matches3 = buffer.split(",").length - 1;
+            return matches1 + matches2 + matches3;
+        }
+
+        async function connectToPortAndSetUpReader(baudRate) {
+            if (port && port.readable !== null && port.writable !== null) {
+                doLog("disconnecting old port connections...");
+                await disconnectAll(false);
+            }
+            await connectToPort(baudRate);
+            setupReader();
+        }
+
+        async function connectToPort(baudRate) {
+            await disconnectAll(false);
+
+            if (port == null) {
+                port = await navigator.serial.requestPort();
+                doLog("user has selected port!");
+            } else console.warn("already connected to port"); // doLog("already connected to port", 'warn');
+
+            try {
+                doLog("opening new port connection...");
+                await port.open({ baudRate: baudRate });
+                currentBaud = baudRate;
+                console.log(`new baudRate: ${baudRate}`);
+            } catch {
+                console.warn("already connected to port");
+                doLog(`port already open @${currentBaud}, if this is unexpected, disconnect from it`, 'warn');
+            }
+        }
+
+        async function disconnectAll(wipePort = true) {
+            await disconnectReader();
+            await disconnectWriter();
+            await disconnectPort(wipePort);
+        }
+
+        async function disconnectWriter() {
+            try {
+                doLog('closing writer...')
+                if (writer) {
+                    await writer.ready; // wait for pending writes
+                    await writer.releaseLock();
+                    writer = null;
+                    doLog('writer closed.');
+                }
+            } catch (err) {
+                doLog(`error closing writer: ${err.message}`, 'error');
+                writer = null;
+            }
+        }
+
+        function setupReader() {
+            if (port && reader == null) {
+                const decoder = new TextDecoderStream("utf-8");
+                if (!port.readable.locked) {
+                    readableStream = port.readable.pipeTo(decoder.writable, { fatal: false });
+                }
+                reader = decoder.readable.getReader();
+            }
+        }
+
+        async function disconnectReader() {
+            try {
+                doLog('Closing reader...');
+
+                if (reader) {
+                    doLog('Stopping reader...');
+                    await reader.cancel();
+                    doLog('Releasing reader...');
+                    reader.releaseLock();
+                    doLog('Reader stopped safely.');
+                    reader = null;
+                } else {
+                    doLog('No reader to close.');
+                }
+
+                if (readableStream) {
+                    doLog('Waiting for pipeline to close...');
+
+                    if (readableStream && typeof readableStream.closed === 'object' && typeof readableStream.closed.then === 'function') {
+                        await readableStream.closed
+                            .then(() => {
+                                doLog('Pipeline closed successfully.');
+                            })
+                            .catch(err => {
+                                doLog(`Pipeline closed (expected cancellation): ${err.message}`);
+                            });
+                    } else {
+                        doLog('Invalid readableStream or it does not have a .closed property.');
+                    }
+
+                    readableStream = null;
+                    doLog('Pipeline reference wiped.');
+                }
+
+            } catch (err) {
+                doLog(`Error during disconnecting reader or pipeline: ${err.message}`, 'error');
+                reader = null;
+                readableStream = null;
+            }
+        }
+
+        async function disconnectPort(wipePort = true) {
+            try {
+                doLog('Closing port...');
+
+                if (port?.readable && port?.writable) {
+                    if (port.readable.locked || port.writable.locked) {
+                        const waitTime = 500;
+                        doLog(`Port streams still locked, waiting ${waitTime}ms...`, 'warn');
+
+                        await waitForStreamsToUnlock(port);
+
+                        doLog('Streams unlocked.');
+                    }
+
+                    await port.close();
+                    currentBaud = null;
+                    currentMode = null;
+                    doLog('Port closed.');
+                }
+            } catch (err) {
+                doLog(`Error closing port: ${err.message}`, 'error');
+            } finally {
+                if (wipePort) {
+                    port = null;
+                    doLog('Port wiped.');
+                }
+            }
+        }
+
+        async function waitForStreamsToUnlock(port) {
+            while (port.readable.locked || port.writable.locked) {
+                try {
+                    if (port.readable.locked) {
+                        doLog('Cancelling reader...');
+                        await port.readable.getReader().cancel();
+                        doLog('Reader cancelled.');
+                    }
+                } catch (e) {
+                    doLog('Forcing reader to cancel failed', 'warn');
+                }
+
+                try {
+                    if (port.writable.locked) {
+                        doLog('Releasing writer lock...');
+                        port.writable.getWriter().releaseLock();
+                        doLog('Writer lock released.');
+                    }
+                } catch (e) {
+                    doLog('Forcing writer to release its lock failed', 'warn');
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        }
+
+        function setBaudRate(bRate) {
+            currentBaudRate = bRate;
+            if (bRate === null) bRate = "???";
+            baudRateOutput.innerHTML = `Baud: ${bRate}`;
+        }
+
+        function updateSentanceCount(valToAdd) {
+            sentanceCount += valToAdd;
+            sentanceCountOutput.innerHTML = `Sentances: ${sentanceCount}`;
+            setOutputClassList(sentanceCountOutput, "positiveStatus");
+        }
+
+        function setOutputClassList(elem, classList, newInnerHtml = null) {
+            if (elem) {
+                elem.classList = `statusItem ${classList}`;
+                if (newInnerHtml) elem.innerHTML = newInnerHtml;
+            }
+        }
+
+        async function _connect() {
+            if (currentBaudRate) {
+                await connectToPort(currentBaudRate);
+                setOutputClassList(baudRateOutput, "positiveStatus");
+                entrypoint_doReadLoop(currentBaudRate); // do not await
+                setBaudRate(currentBaudRate);
+            }
+        }
+
+        async function entrypoint_doReadLoop() {
+            messagesBuffer = "";
+            const MAX_BUFFER_SIZE = 10000; // Adjust based on needs
+
+            try {
+                setupReader();
+                readLoopRunning = true;
+
+                while (readLoopRunning) {
+                    let value, done;
+                    try {
+                        ({ value, done } = await reader.read());
+                    } catch (err) {
+                        console.error("reader.read() threw:", err);
+                        throw err;  // Optional: rethrow to go to outer catch
+                    }
+
+                    if (value.includes('\uFFFD')) {
+                        console.warn("Corrupted data received");
+                        console.log(value);
+                    }
+
+                    if (done) {
+                        doLog('stream closed by device');
+                        readLoopRunning = false;
+                        reader.releaseLock();
+                    } else if (value) {
+
+                        // rolling buffer: keep only recent data
+                        if (messagesBuffer.length > MAX_BUFFER_SIZE) {
+                            // find the last complete message boundary
+                            const lastMsgGapInstance = messagesBuffer.lastIndexOf(jsCrLf, MAX_BUFFER_SIZE / 2);
+                            if (lastMsgGapInstance > 0) {
+                                messagesBuffer = messagesBuffer.substring(lastMsgGapInstance);
+                            } else {
+                                // fallback: just truncate to half size
+                                messagesBuffer = messagesBuffer.substring(MAX_BUFFER_SIZE / 2);
+                            }
+                        }
+
+                        // send message as event
+                        handleNewMsg(value);
+                    }
+                }
+            } catch (err) {
+                doLog(`error during read operation: ${err.message}`, 'error');
+                await disconnectAll(false);
+            }
+        }
+
+        function handleNewMsg(newMsg) {
+            tempMsgLog += newMsg;
+            msgLog += newMsg;
+            const messagesSplit = msgLog.split("\r\n");
+            msgLog = messagesSplit.pop(); // assume last message is incomplete and use it for the buffer.
+            if (isRecordingPgnMsgs && messagesSplit.length) recordLog += messagesSplit.join("\r\n") + "\r\n";
+            updateSentanceCount(messagesSplit.length);
+            messagesSplit.forEach(msg => {
+                const newElem = document.createElement('p');
+                newElem.className = 'consoleEntry';
+                newElem.textContent = msg;
+                consoleContent.appendChild(newElem);
+                // consoleContent.innerHTML += `<p class="consoleEntry">${msg}</p>`
+            });
+            if (isConsoleScrolling) consoleContent.scrollTop = consoleContent.scrollHeight;
+        }
+
+        function saveFile(data, filename = "newFile.txt") {
+            const isJson = Array.isArray(data) || (typeof data === 'object');
+            const text = isJson ? JSON.stringify(data, null, 2) : data.toString();
+            const type = isJson ? 'application/json' : 'text/plain';
+            const blob = new Blob([text], { type });
+            if (window.showSaveFilePicker) saveFileModern(blob, filename);
+            else saveFileFallback(blob, filename);
+        }
+
+        async function saveFileModern(blob, filename) {
+            try {
+                const fileHandle = await window.showSaveFilePicker({
+                    suggestedName: filename,
+                    types: [{
+                        description: 'Text files',
+                        accept: { 'text/plain': ['.txt'], },
+                    },],
+                });
+                const writable = await fileHandle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+                console.log('File saved successfully!');
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.error('Error saving file:', err);
+                    saveFileFallback(blob, filename);
+                }
+            }
+        }
+
+        function saveFileFallback(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function doMsgSend(msg, doCrLfCheck = true) {
+            doLog(`sending message: ${msg}`);
+            if (doCrLfCheck && msg.slice(-2) !== jsCrLf) msg += jsCrLf; // make sure we have [CR][LF] at the end of our msg
+            const textEncoder = new TextEncoder();
+            const encodedMsg = textEncoder.encode(msg);
+            if (writer == undefined) writer = port.writable.getWriter();
+            await writer.write(encodedMsg);
+            doLog(`message sent!`);
+            return true;
+        }
+
+        function bandwidthCalculator() {
+            // replacing CRLF with single charaters
+            tempMsgLog.replace(/\r/g, '#');
+            tempMsgLog.replace(/\n/g, '#');
+            const charCount = tempMsgLog.length;
+            tempMsgLog = "";
+            const bandwidth = charCount / (currentBaudRate / 10) * 100;
+            const outputText = `Bandwidth: ${bandwidth.toFixed(1)}%`;
+            let status = "";
+            if (bandwidth <= 30) {
+                status = "positiveStatus";
+            } else if (bandwidth <= 60) {
+                status = "questionStatus";
+            } else {
+                status = "negativeStatus";
+            }
+            setOutputClassList(bandwidthOutput, status, outputText);
+        }
+
+    </script>
+
+</body>
+
+</html>
