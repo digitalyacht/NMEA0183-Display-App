@@ -692,7 +692,7 @@
     <div class="statusBox">
 
         <span id="baudRateOutput" class="questionStatus statusItem">Baud Rate: ???</span>
-        <span id="sentanceCountOutput" class="questionStatus statusItem">Sentances: 0</span>
+        <span id="sentanceCountOutput" class="questionStatus statusItem">Sentences: 0</span>
         <span id="bandwidthOutput" class="questionStatus statusItem">Bandwidth: XX%</span>
 
     </div>
@@ -1281,7 +1281,7 @@
 
         function updateSentanceCount(valToAdd) {
             sentanceCount += valToAdd;
-            sentanceCountOutput.innerHTML = `Sentances: ${sentanceCount}`;
+            sentanceCountOutput.innerHTML = `Sentences: ${sentanceCount}`;
             setOutputClassList(sentanceCountOutput, "positiveStatus");
         }
 
